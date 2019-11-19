@@ -1,0 +1,50 @@
+{
+  "name": "longer-cli",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "lg": "./bin_test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.6.4",
+    "babel-loader": "^8.0.6",
+    "chokidar": "^3.3.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "gulp": "^4.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "https": "^1.0.0",
+    "inquirer": "^7.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "mockjs": "^1.1.0",
+    "node-sass": "^4.13.0",
+    "nodegit": "^0.26.2",
+    "open": "^7.0.0",
+    "ora": "^4.0.2",
+    "puppeteer": "^2.0.0",
+    "sass-loader": "^8.0.0",
+    "vue-loader": "^15.7.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.1",
+    "commander": "^2.20.3",
+    "html-webpack-inline-source-plugin": "0.0.10",
+    "http": "0.0.0",
+    "opn": "^6.0.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "serve-handler": "^6.1.2",
+    "uglifyjs-webpack-plugin": "^2.2.0"
+  }
+}
