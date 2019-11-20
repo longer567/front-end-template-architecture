@@ -41,7 +41,7 @@ function lgInit(args) {
 
                 git.Clone(`https://github.com/elegantTemplate/${answers.templateName}.git`, `./${answers.templateName}`).then(repo => {
                     spinner.stop();
-                    console.log('template download over')
+                    console.log('template download finish')
                     process.exit(0)
                 })
             });

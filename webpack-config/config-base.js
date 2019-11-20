@@ -33,7 +33,6 @@ const entryMode = () => {
         fs.readdirSync(path.resolve(template_file_path, './src/pages')).forEach(p => {
             temp[p] = path.resolve(template_file_path, `./src/pages/${p}/index.js`)
         })
-        console.log('tag', temp)
         return temp
     }
 }
@@ -44,28 +43,6 @@ const entryMode = () => {
 module.exports = (env_param) => {
     return {
         mode: 'production',
-        optimization: {
-            // env must be production
-            minimizer: [
-                new OptimizeCssAssetsPlugin(),
-                new UglifyJsPlugin()
-            ],
-            splitChunks: {
-                chunks: 'all',
-                cacheGroups: {
-                    js: {
-                        name: 'common',
-                        test: /[\\/]node_modules[\\/]/,
-                        filename: 'js/common.[contenthash].js',
-                        chunks: 'all'
-                    },
-                    default: {
-                        reuseExistingChunk: true,
-                        filename: 'common.[contenthash].js'
-                      }
-                }
-            }
-        },
         entry: entryMode(),
         output: {
             path: path.resolve(template_file_path, "dist"),
@@ -117,19 +94,37 @@ module.exports = (env_param) => {
         plugins: [
             new VueLoaderPlugin(),
             ...path_file_arr.map(p => new HtmlWebpackPlugin({
-                chunks: ["common", p, "main"],
+                chunks: [p, "common"],
                 template: `src/${projectElement === 'single' ? '' : 'pages/' + p + '/'}index.html`,
                 filename: `${p}/index.html`,
                 inject: 'body'
             })),
             new MiniCssExtractPlugin({
                 filename: 'style/[name].[contenthash].css',
-                chunkFilename: "[id].css"
+                // Dynamically output filename when css is built
+                // chunkFilename: "style/[name].[contenthash].css"
             }),
             new CssCommonSplitPlugin(),
             new webpack.HotModuleReplacementPlugin(),
             // new HtmlReplacePlugin(lg_config_content.replace_content[env_param]),
             new InjectEngPlugin(env_param || 'prod')
-        ]
+        ],
+        optimization: {
+            // env must be production
+            minimizer: [
+                new OptimizeCssAssetsPlugin(),
+                new UglifyJsPlugin()
+            ],
+            splitChunks: {
+                cacheGroups: {
+                    common: {
+                        name: 'common',
+                        chunks: 'initial',
+                        minChunks: 2, 
+                        minSize: 0, 
+                    }
+                }
+            }
+        },
     };
 }
