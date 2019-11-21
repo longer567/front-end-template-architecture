@@ -41,13 +41,16 @@ const entryMode = () => {
  * @param {String} env_param lg-config.js replace_content keys
  */
 module.exports = (env_param) => {
+
+    const public_path = lg_config_content[env_param].publicPath
+
     return {
         mode: 'production',
         entry: entryMode(),
         output: {
-            path: path.resolve(template_file_path, "dist"),
+            path: path.resolve(template_file_path, `dist${public_path.substr(0, public_path.length - 1)}`),
             filename: "js/[name].[hash].js",
-            publicPath: lg_config_content[env_param].publicPath
+            publicPath: public_path
         },
         module: {
             rules: [{
@@ -94,15 +97,15 @@ module.exports = (env_param) => {
         plugins: [
             new VueLoaderPlugin(),
             ...path_file_arr.map(p => new HtmlWebpackPlugin({
-                chunks: [p, "common"],
+                chunks: projectElement === 'single' ? ['module', 'common', 'main'] : [p, 'module', 'common'],
                 template: `src/${projectElement === 'single' ? '' : 'pages/' + p + '/'}index.html`,
-                filename: `${p}/index.html`,
+                filename: `${projectElement === 'single' ? p + '/index.html' : p + '.html'}`,
                 inject: 'body'
             })),
             new MiniCssExtractPlugin({
                 filename: 'style/[name].[contenthash].css',
                 // Dynamically output filename when css is built
-                // chunkFilename: "style/[name].[contenthash].css"
+                chunkFilename: "style/[name].[contenthash].css"
             }),
             new CssCommonSplitPlugin(),
             new webpack.HotModuleReplacementPlugin(),
@@ -117,9 +120,16 @@ module.exports = (env_param) => {
             ],
             splitChunks: {
                 cacheGroups: {
+                    js: {
+                        name: 'module',
+                        test: /[\\/]node_modules[\\/]/,
+                        filename: 'js/module.[contenthash].js',
+                        chunks: 'all',
+                        priority: 10
+                    },
                     common: {
                         name: 'common',
-                        chunks: 'initial',
+                        chunks: 'all',
                         minChunks: 2, 
                         minSize: 0, 
                     }

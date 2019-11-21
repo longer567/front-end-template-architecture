@@ -65,6 +65,10 @@ lg.request = (opt) => {
 
 lg.exist = (p) => (fs.existsSync || path.existsSync)(p);
 
+/**
+ * @param {Function} func A function need debounce
+ * @param {String} delay debounce delay time
+ */
 lg.debounce = function(func, delay){
 	var timeout;
 	return function(...args) {
@@ -75,5 +79,16 @@ lg.debounce = function(func, delay){
 		}, delay)
 	}
 }
+
+lg.mkdirsSync = (dirname) => {
+	if (lg.exist(dirname)) {
+	  return true;
+	} else {
+	  if (lg.mkdirsSync(path.dirname(dirname))) {
+		fs.mkdirSync(dirname);
+		return true;
+	  }
+	}
+  }
 
 module.exports = lg

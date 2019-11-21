@@ -1,5 +1,8 @@
 
-
+/**
+ * 
+ * @param {Object} options env variable inject in files when webpack is ran 
+ */
 class HtmlReplacePlugin{
     constructor(options) {
         this.options = options

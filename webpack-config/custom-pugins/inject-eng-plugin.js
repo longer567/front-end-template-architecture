@@ -4,7 +4,7 @@ const fs = require('fs')
 class InjectEngPlugin {
     /**
      * 
-     * @param {String} assets_path engine.js inject path in html at dist
+     * @param {String} env engine.js inject path in html at dist(correspond publicePath in lg-config)
      */
     constructor(env) {
         this.env = env
@@ -16,10 +16,9 @@ class InjectEngPlugin {
             const env_param = this.env
             const assets_path = require(path.resolve(process.cwd(), 'lg-config.js'))[env_param || 'prod'].publicPath
 
-            const dir = path.resolve(process.cwd(), `dist`)
-                env_param === 'prod' && !lg.exist(dir) && fs.mkdirSync(dir)
+            const dir = path.resolve(process.cwd(), `dist${assets_path}`)
             
-            // env_param !== 'prod' ? lg.exist(dir) && fs.rmdirSync(dir) : !lg.exist(dir) && fs.mkdirSync(dir)
+            env_param === 'prod' && !lg.exist(path.resolve(process.cwd(), `dist`)) && lg.mkdirsSync(dir)
 
             for (let filename in compilation.assets) {
                 const file_element = filename.split('.').pop()
@@ -37,7 +36,7 @@ class InjectEngPlugin {
                     }
                 }
 
-                // if webpack-dev-serve open
+                // webpack-dev-serve inject files in disk
                 // if (filename.indexOf('hot-update') <= -1)
                 // {
                 //     !lg.exist(path.resolve(dir, filename.split('/')[0])) && fs.mkdirSync(path.resolve(dir, filename.split('/')[0]))
@@ -46,7 +45,7 @@ class InjectEngPlugin {
             }
             if (env_param === 'prod') {
                 const readStream = fs.createReadStream(path.resolve(process.cwd(), 'engine.js'))
-                const writeStream = fs.createWriteStream(path.resolve(process.cwd(), 'dist/engine.js'))
+                const writeStream = fs.createWriteStream(path.resolve(process.cwd(), `dist${assets_path}engine.js`))
 
                 await readStream.on('data', (data) => {
                     writeStream.write(data)
