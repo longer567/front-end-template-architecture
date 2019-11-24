@@ -38,5 +38,5 @@ async function devRun(args) {
     }
   })
 
-  devServer.listen(dev.devServer_config.port || 3000)
+  devServer.listen(dev.devServer_config.port || 3001)
 }

@@ -97,7 +97,7 @@ module.exports = (env_param) => {
         plugins: [
             new VueLoaderPlugin(),
             ...path_file_arr.map(p => new HtmlWebpackPlugin({
-                chunks: projectElement === 'single' ? ['module', 'common', 'main'] : [p, 'module', 'common'],
+                chunks: ['module', 'common', projectElement === 'single' ? 'main' : p],
                 template: `src/${projectElement === 'single' ? '' : 'pages/' + p + '/'}index.html`,
                 filename: `${projectElement === 'single' ? p + '/index.html' : p + '.html'}`,
                 inject: 'body'

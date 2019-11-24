@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const request = require('request')
 
 // global lg Object
 Object.defineProperty(global, 'lg', {
@@ -35,31 +36,16 @@ lg.get = (url, data = '') => {
 }
 
 /**
- * @param {Object} opt {url, data, method}
+ * @param {String} url download url
+ * @typedef {fs.WriteStream} path download file writeStream to disk's position
  */
-lg.request = (opt) => {
-	const url = new URL(opt.url)
-	const protocolrequire = require(url.protocol.substr(0, protocol.length - 1))
+lg.download = (url, path) => {
+	const protocol = (new URL(url)).protocol
+	const protocolrequire = require(protocol.substr(0, protocol.length - 1))
 	return new Promise((resolve, reject) => {
-		protocolrequire.request({
-			hostname: url.hostname,
-			path: url.pathname,
-			method: (opt.method || 'POST'),
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Content-Length': Buffer.byteLength(opt.data)
-			}
-		}, res => {
-			let chunks = ''
-			res.on('data', (chunk) => {
-				chunks += chunk
-			})
-			res.on('end', () => {
-				resolve(JSON.parse(chunks))
-			})
-		}).on('err', err => {
-			reject(err)
-		}).write(opt.data).end()
+		request(url).pipe(path).on('close', (res) => {
+			resolve(res)
+		})
 	})
 }
 
@@ -69,12 +55,12 @@ lg.exist = (p) => (fs.existsSync || path.existsSync)(p);
  * @param {Function} func A function need debounce
  * @param {String} delay debounce delay time
  */
-lg.debounce = function(func, delay){
+lg.debounce = function (func, delay) {
 	var timeout;
-	return function(...args) {
+	return function (...args) {
 		clearTimeout(timeout)
 		var context = this
-		timeout = setTimeout(function(){
+		timeout = setTimeout(function () {
 			func.apply(context, args)
 		}, delay)
 	}
@@ -82,13 +68,14 @@ lg.debounce = function(func, delay){
 
 lg.mkdirsSync = (dirname) => {
 	if (lg.exist(dirname)) {
-	  return true;
-	} else {
-	  if (lg.mkdirsSync(path.dirname(dirname))) {
-		fs.mkdirSync(dirname);
 		return true;
-	  }
+	} else {
+		if (lg.mkdirsSync(path.dirname(dirname))) {
+			fs.mkdirSync(dirname);
+			return true;
+		}
 	}
-  }
+}
+
 
 module.exports = lg

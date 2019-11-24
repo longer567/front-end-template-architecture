@@ -40,7 +40,7 @@ const hooksListener = (app, data) => {
 }
 
 const changeFile = (app, devBase, p) => {
-    console.log('file changed effectivation')
+    console.log('file changed effectivation...')
     if (p.indexOf('mock.js') > -1) {
         delete require.cache[path.resolve(process.cwd(), 'mock.js')]
         hooksListener(app, require(path.resolve(process.cwd(), 'mock.js')))
