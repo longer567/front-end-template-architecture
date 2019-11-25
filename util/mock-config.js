@@ -48,7 +48,7 @@ const changeFile = (app, devBase, p) => {
     whatFileControll(p, 'mock.js', devBase)     
 }
 
-const whatFileControll = (p, e, devBase) => p.indexOf(e) > -1 && openBrowser(`http://${devBase.devServer_config.host || 'localhost'}:${devBase.devServer_config.port || '3001'}${devBase.path || '/'}`)
+const whatFileControll = (p, e, devBase) => p.indexOf(e) > -1 && openBrowser(`${devBase.devServer_config.https || 'http'}://${devBase.devServer_config.host || 'localhost'}:${devBase.devServer_config.port || '3001'}${devBase.path || '/'}`)
 
 module.exports = (mockData, devBase) => (app, server, compiler) => {
     console.log('file changed effectivation')
