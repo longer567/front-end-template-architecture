@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const InjectEngPlugin = require('./custom-pugins/inject-eng-plugin');
-const CssCommonSplitPlugin = require('./custom-pugins/css-common-split-plugin')
 
 const template_file_path = process.cwd()
 const path_file_arr = fs.readdirSync(path.resolve(template_file_path, './src/pages'))
@@ -20,6 +19,8 @@ const babelLoader = loaderPath('babel-loader')
 const cssLoader = loaderPath('css-loader')
 const sassLoader = loaderPath('sass-loader')
 const babelEnv = loaderPath('@babel/preset-env')
+const urlLoader = loaderPath('url-loader')
+const fileLoader = loaderPath('file-loader')
 
 const projectElement = lg_config_content.projectElement;
 
@@ -77,7 +78,31 @@ module.exports = (env_param) => {
                         cssLoader,
                         sassLoader,
                     ]
-                }
+                },
+                {
+                    test: /\.(jpg|png|gif|bmp|jpeg)$/,
+                    use: [
+                        {
+                            loader: urlLoader,
+                            options: {
+                                limit: 8192,
+                                name: 'assets/images/[name]_[hash].[ext]'
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                    use: [
+                      {
+                        loader: fileLoader,
+                        options: {
+                          name: '[name]_[hash].[ext]',
+                          outputPath: 'assets/fonts/'
+                        }
+                      }
+                    ]
+                  },
             ]
         },
         performance: {
@@ -105,9 +130,8 @@ module.exports = (env_param) => {
             new MiniCssExtractPlugin({
                 filename: 'style/[name].[contenthash].css',
                 // Dynamically output filename when css is built
-                chunkFilename: "style/[name].[contenthash].css"
+                // chunkFilename: "style/[name].[contenthash].css"
             }),
-            new CssCommonSplitPlugin(),
             new webpack.HotModuleReplacementPlugin(),
             // new HtmlReplacePlugin(lg_config_content.replace_content[env_param]),
             new InjectEngPlugin(env_param || 'prod')
@@ -135,6 +159,6 @@ module.exports = (env_param) => {
                     }
                 }
             }
-        },
-    };
+        }
+    }
 }

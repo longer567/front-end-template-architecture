@@ -40,22 +40,23 @@ const hooksListener = (app, data) => {
 }
 
 const changeFile = (app, devBase, p) => {
-    console.log('file changed effectivation...')
     if (p.indexOf('mock.js') > -1) {
         delete require.cache[path.resolve(process.cwd(), 'mock.js')]
         hooksListener(app, require(path.resolve(process.cwd(), 'mock.js')))
     }
 
-    if (p.indexOf('mock.js') > -1 || p.indexOf('engine.js') > -1)
-        openBrowser(`//${devBase.devServer_config.host || 'localhost'}:${devBase.devServer_config.port || '3001'}${devBase.path || '/'}`)
+    whatFileControll(p, 'mock.js', devBase)     
 }
 
+const whatFileControll = (p, e, devBase) => p.indexOf(e) > -1 && openBrowser(`http://${devBase.devServer_config.host || 'localhost'}:${devBase.devServer_config.port || '3001'}${devBase.path || '/'}`)
+
 module.exports = (mockData, devBase) => (app, server, compiler) => {
+    console.log('file changed effectivation')
 
     watcher.on('ready', () => {
-        hooksListener(app, mockData)
+        devBase.useMock && hooksListener(app, mockData)
     }).on('change', async p => {
-        lg.debounce(changeFile, saveDelay)(app, devBase, p)
+        devBase.useMock && lg.debounce(changeFile, saveDelay)(app, devBase, p)
+        whatFileControll(p, 'engine.js', devBase)
     })
-
 }

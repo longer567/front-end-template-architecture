@@ -14,7 +14,13 @@ lg.prin = () => {
 
 // helpness in lg
 lg.help = () => {
-	const helpText = `It is a so small project by longer`;
+	const helpText = `It is a so small project by longer
+					  \n 'lg init': pull customized template by lg-cli
+					  \n 'lg dev': start development
+					  \n 'lg build': generate online resources
+					  \n 'lg serve': open a serve in local
+					  \n See the documentation for more detailed operations.
+					  `;
 	console.log(helpText);
 }
 

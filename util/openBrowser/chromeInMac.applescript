@@ -20,9 +20,10 @@ tell application "Google Chrome"
         end repeat
 
         if found = false then
-            make new window
+            -- make new window
             activate
-            set URL of active tab of first window to theURL
+            -- set URL of active tab of first window to theURL
+            tell front window to make new tab at after (get active tab) with properties {URL: theUrl} 
         end if
         
 -- chrome closed

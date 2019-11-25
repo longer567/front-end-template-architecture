@@ -7,8 +7,9 @@ Object.defineProperty(global, 'lg', {
 	value: Object.create(null)
 })
 
-lg.logs = (err) => {
-	console.log(err);
+// used log after exit project
+lg.logs = (e) => {
+	console.log(e);
 	process.exit(0);
 }
 
