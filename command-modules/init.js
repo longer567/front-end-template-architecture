@@ -21,7 +21,8 @@ function lgInit(args) {
             return {
                 name: i.name,
                 id: i.id,
-                downloadUrl: i.downloads_url
+                downloadUrl: i.downloads_url,
+                description: i.description
             }
         })
 
@@ -53,9 +54,15 @@ function lgInit(args) {
             {
                 type: 'input',
                 message: 'Please input author name',
+                name: 'description',
+                default: `Template project with lg-cli as the core`
+            },
+            {
+                type: 'input',
+                message: 'Please input author name',
                 name: 'author',
                 default: `longer`
-            }
+            },
         ]
 
         inquirer
@@ -84,12 +91,14 @@ function lgInit(args) {
                 const {
                     name,
                     version,
-                    author
+                    author,
+                    description,
                 } = answers
                 content = Object.assign(JSON.parse(content), {
                     name,
                     version,
-                    author
+                    description,
+                    author,
                 });
                 fs.writeFileSync(writePath, JSON.stringify(content))
 
