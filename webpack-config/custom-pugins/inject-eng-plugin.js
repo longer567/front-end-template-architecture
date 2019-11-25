@@ -28,7 +28,7 @@ class InjectEngPlugin {
 
                     compilation.assets[filename] = {
                         source: function () {
-                            return `${temp_file_content.slice(0, inject_position)}<script src='${assets_path}engine.js'></script> ${temp_file_content.slice(inject_position)}`
+                            return `${temp_file_content.slice(0, inject_position)}<script src='${assets_path}engine${env_param === 'dev' && '_temp'}.js'></script> ${temp_file_content.slice(inject_position)}`
                         },
                         size: function () {
                             return compilation.assets[filename].length

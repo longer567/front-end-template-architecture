@@ -18,6 +18,8 @@
     "chokidar": "^3.3.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
+    "eslint": "^6.7.1",
+    "eslint-plugin-vue": "^5.0.0-beta.6",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fs-extra": "^8.1.0",
     "gulp": "^4.0.1",

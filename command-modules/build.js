@@ -11,11 +11,13 @@ function devRun(args) {
       lg.logs("The 'lg-config.js' file is required to execute this command.")
 
     const webpack = require('webpack')
+    // const InjectEngPlugin = require('../webpack-config/custom-pugins/inject-eng-plugin');
     const {
         CleanWebpackPlugin
     } = require('clean-webpack-plugin');
     const configBase = require('../webpack-config/config-base')('prod')
     configBase.plugins.unshift(new CleanWebpackPlugin())
+    // configBase.plugins = [new CleanWebpackPlugin(), new InjectEngPlugin('prod'), ...configBase.plugins]
 
     const compiler = webpack({
           ...configBase
