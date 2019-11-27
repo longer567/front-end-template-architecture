@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const request = require('request')
+const chalk = require('chalk');
+
+// const resultGatherText = require('./eslint-run')
+
 
 // global lg Object
 Object.defineProperty(global, 'lg', {
@@ -78,5 +82,14 @@ lg.mkdirsSync = (dirname) => {
 	}
 }
 
+// lg.eslintRun = () => {
+// 	resultGatherText.warningText.length && resultGatherText.warningText.forEach(i => {
+// 		console.log(chalk.yellow(i))
+// 	});
+// 	resultGatherText.errorText.length && resultGatherText.errorText.forEach(i => {
+// 		console.log(chalk.red(i))
+// 	}) 
+// 	resultGatherText.errorText.length && lg.logs(chalk.red('Please modify these errors first'))
+// }
 
 module.exports = lg

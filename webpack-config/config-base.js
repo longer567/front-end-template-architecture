@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const InjectEngPlugin = require('./custom-pugins/inject-eng-plugin');
+const EslineRunningPlugin = require('./custom-pugins/eslint-runnint-plugin');
 
 const template_file_path = process.cwd()
 const path_file_arr = fs.readdirSync(path.resolve(template_file_path, './src/pages'))
@@ -21,6 +22,7 @@ const sassLoader = loaderPath('sass-loader')
 const babelEnv = loaderPath('@babel/preset-env')
 const urlLoader = loaderPath('url-loader')
 const fileLoader = loaderPath('file-loader')
+const eslintLoader = loaderPath('eslint-loader')
 
 const projectElement = lg_config_content.projectElement;
 
@@ -45,6 +47,64 @@ module.exports = (env_param) => {
 
     const public_path = lg_config_content[env_param].publicPath
 
+    const rules = [{
+        test: /\.vue$/,
+        loader: vueLoader,
+        options: {
+            extractCSS: true,
+        },
+        exclude: /node_modules/
+    },
+    {
+        test: /\.js$/,
+        loader: babelLoader,
+        query: {
+            presets: [
+                babelEnv
+            ]
+        }
+    },
+    {
+        test: /\.(sc|sa|c)ss$/,
+        use: [
+            MiniCssExtractPlugin.loader,
+            cssLoader,
+            sassLoader,
+        ]
+    },
+    {
+        test: /\.(jpg|png|gif|bmp|jpeg)$/,
+        use: [{
+            loader: urlLoader,
+            options: {
+                limit: 8192,
+                name: 'assets/images/[name]_[hash].[ext]'
+            }
+        }]
+    },
+    {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+            loader: fileLoader,
+            options: {
+                name: '[name]_[hash].[ext]',
+                outputPath: 'assets/fonts/'
+            }
+        }]
+    }
+]
+
+lg_config_content.useEslint && rules.push(    {
+    enforce: 'pre',
+    test: /\.(js|vue)$/,
+    loader: eslintLoader,
+    include: ['/Users/zhenglong2/xiaolong-jdjr/practice_in_longer/temp_project'],
+    exclude: /node_modules/,
+    options: {
+        formatter: require('eslint-friendly-formatter')
+      }
+})
+
     return {
         mode: 'production',
         entry: entryMode(),
@@ -54,56 +114,7 @@ module.exports = (env_param) => {
             publicPath: public_path
         },
         module: {
-            rules: [{
-                    test: /\.vue$/,
-                    loader: vueLoader,
-                    options: {
-                        extractCSS: true,
-                    },
-                    exclude: /node_modules/
-                },
-                {
-                    test: /\.js$/,
-                    loader: babelLoader,
-                    query: {
-                        presets: [
-                            babelEnv
-                        ]
-                    }
-                },
-                {
-                    test: /\.(sc|sa|c)ss$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        cssLoader,
-                        sassLoader,
-                    ]
-                },
-                {
-                    test: /\.(jpg|png|gif|bmp|jpeg)$/,
-                    use: [
-                        {
-                            loader: urlLoader,
-                            options: {
-                                limit: 8192,
-                                name: 'assets/images/[name]_[hash].[ext]'
-                            }
-                        }
-                    ]
-                },
-                {
-                    test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                    use: [
-                      {
-                        loader: fileLoader,
-                        options: {
-                          name: '[name]_[hash].[ext]',
-                          outputPath: 'assets/fonts/'
-                        }
-                      }
-                    ]
-                  },
-            ]
+            rules
         },
         performance: {
             hints: false
@@ -121,6 +132,7 @@ module.exports = (env_param) => {
         },
         plugins: [
             new VueLoaderPlugin(),
+            // new EslineRunningPlugin(esLintPath.useEslint),
             ...path_file_arr.map(p => new HtmlWebpackPlugin({
                 chunks: ['module', 'common', projectElement === 'single' ? 'main' : p],
                 template: `src/${projectElement === 'single' ? '' : 'pages/' + p + '/'}index.html`,
@@ -154,8 +166,8 @@ module.exports = (env_param) => {
                     common: {
                         name: 'common',
                         chunks: 'all',
-                        minChunks: 2, 
-                        minSize: 0, 
+                        minChunks: 2,
+                        minSize: 0,
                     }
                 }
             }

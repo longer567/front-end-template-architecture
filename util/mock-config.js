@@ -51,12 +51,12 @@ const changeFile = (app, devBase, p) => {
 const whatFileControll = (p, e, devBase) => p.indexOf(e) > -1 && openBrowser(`${devBase.devServer_config.https || 'http'}://${devBase.devServer_config.host || 'localhost'}:${devBase.devServer_config.port || '3001'}${devBase.path || '/'}`)
 
 module.exports = (mockData, devBase) => (app, server, compiler) => {
-    console.log('file changed effectivation')
 
     watcher.on('ready', () => {
         devBase.useMock && hooksListener(app, mockData)
     }).on('change', async p => {
         devBase.useMock && lg.debounce(changeFile, saveDelay)(app, devBase, p)
         whatFileControll(p, 'engine.js', devBase)
+        console.log('file changed effectivation')
     })
 }

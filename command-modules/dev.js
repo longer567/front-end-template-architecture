@@ -21,9 +21,9 @@ async function devRun(args) {
   const mockLg = require('../util/mock-config')
 
   const compiler = webpack({
-    ...configBase,
+    ...configBase
   })
-
+  
   const devServer = new WebpackDevServer(compiler, {
     ...dev.devServer_config,
     before: mockLg(mockData, dev),
