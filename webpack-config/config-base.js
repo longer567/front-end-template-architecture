@@ -98,7 +98,7 @@ lg_config_content.useEslint && rules.push(    {
     enforce: 'pre',
     test: /\.(js|vue)$/,
     loader: eslintLoader,
-    include: ['/Users/zhenglong2/xiaolong-jdjr/practice_in_longer/temp_project'],
+    include: [path.resolve(process.cwd(), 'src')],
     exclude: /node_modules/,
     options: {
         formatter: require('eslint-friendly-formatter')
