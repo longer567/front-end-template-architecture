@@ -23,18 +23,21 @@ const babelEnv = loaderPath('@babel/preset-env')
 const urlLoader = loaderPath('url-loader')
 const fileLoader = loaderPath('file-loader')
 const eslintLoader = loaderPath('eslint-loader')
+const awesomeTypescriptLoader = loaderPath('awesome-typescript-loader')
+const sourceMapLoader = loaderPath('source-map-loader')
 
 const projectElement = lg_config_content.projectElement;
+const useTs = lg_config_content.useTypeScript;
 
 projectElement === 'single' && path_file_arr.push('.')
 
 const entryMode = () => {
     if (projectElement === 'single')
-        return path.resolve(template_file_path, "./src/main.js")
+        return path.resolve(template_file_path, `./src/main.${useTs ? 'ts' : 'js'}`)
     else {
         let temp = {}
         fs.readdirSync(path.resolve(template_file_path, './src/pages')).forEach(p => {
-            temp[p] = path.resolve(template_file_path, `./src/pages/${p}/index.js`)
+            temp[p] = path.resolve(template_file_path, `./src/pages/${p}/index.${useTs ? 'ts' : 'js'}`)
         })
         return temp
     }
@@ -48,66 +51,81 @@ module.exports = (env_param) => {
     const public_path = lg_config_content[env_param].publicPath
 
     const rules = [{
-        test: /\.vue$/,
-        loader: vueLoader,
-        options: {
-            extractCSS: true,
+            test: /\.vue$/,
+            loader: vueLoader,
+            options: {
+                extractCSS: true,
+            },
+            exclude: /node_modules/
         },
-        exclude: /node_modules/
-    },
-    {
-        test: /\.js$/,
-        loader: babelLoader,
-        query: {
-            presets: [
-                babelEnv
+        {
+            test: /\.js$/,
+            loader: babelLoader,
+            query: {
+                presets: [
+                    babelEnv
+                ]
+            }
+        },
+        {
+            test: /\.(sc|sa|c)ss$/,
+            use: [
+                MiniCssExtractPlugin.loader,
+                cssLoader,
+                sassLoader,
             ]
+        },
+        {
+            test: /\.(jpg|png|gif|bmp|jpeg)$/,
+            use: [{
+                loader: urlLoader,
+                options: {
+                    limit: 8192,
+                    name: 'assets/images/[name]_[hash].[ext]'
+                }
+            }]
+        },
+        {
+            test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+            use: [{
+                loader: fileLoader,
+                options: {
+                    name: '[name]_[hash].[ext]',
+                    outputPath: 'assets/fonts/'
+                }
+            }]
         }
-    },
-    {
-        test: /\.(sc|sa|c)ss$/,
-        use: [
-            MiniCssExtractPlugin.loader,
-            cssLoader,
-            sassLoader,
-        ]
-    },
-    {
-        test: /\.(jpg|png|gif|bmp|jpeg)$/,
-        use: [{
-            loader: urlLoader,
-            options: {
-                limit: 8192,
-                name: 'assets/images/[name]_[hash].[ext]'
-            }
-        }]
-    },
-    {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-            loader: fileLoader,
-            options: {
-                name: '[name]_[hash].[ext]',
-                outputPath: 'assets/fonts/'
-            }
-        }]
-    }
-]
+    ]
 
-lg_config_content.useEslint && rules.push(    {
-    enforce: 'pre',
-    test: /\.(js|vue)$/,
-    loader: eslintLoader,
-    include: [path.resolve(process.cwd(), 'src')],
-    exclude: /node_modules/,
-    options: {
-        formatter: require('eslint-friendly-formatter')
-      }
-})
+    lg_config_content.useEslint && rules.push({
+        enforce: 'pre',
+        test: /\.(js|vue)$/,
+        loader: eslintLoader,
+        include: [path.resolve(process.cwd(), 'src')],
+        exclude: /node_modules/,
+        options: {
+            formatter: require('eslint-friendly-formatter')
+        }
+    })
+
+    const tsRuleConfig = [{
+            test: /\.tsx?$/,
+            loader: awesomeTypescriptLoader
+        },
+        {
+            enforce: "pre",
+            test: /\.js$/,
+            loader: sourceMapLoader
+        }
+
+    ]
+
+    useTs && rules.push(...tsRuleConfig)
 
     return {
         mode: 'production',
         entry: entryMode(),
+        devtool: "source-map",
         output: {
             path: path.resolve(template_file_path, `dist${public_path.substr(0, public_path.length - 1)}`),
             filename: "js/[name].[hash].js",
@@ -121,7 +139,7 @@ lg_config_content.useEslint && rules.push(    {
         },
         resolve: {
             extensions: [
-                '.vue', '.js'
+                '.vue', '.js', ".ts", ".tsx", "json"
             ],
             modules: ["node_modules"],
             alias: {

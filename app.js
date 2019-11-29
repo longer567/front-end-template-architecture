@@ -14,7 +14,7 @@ lg.prin = () => {
 
 // helpness in lg
 lg.help = () => {
-	const helpText = `It is a so small project by longer
+	const helpText = `${lg.lgInfo.description}
 					  \n 'lg init': pull customized template by lg-cli
 					  \n 'lg dev': start development
 					  \n 'lg build': generate online resources
