@@ -6,6 +6,7 @@
 #
 .idea
 .vscode
+.code-workspace
 dist/
 build/
 
@@ -19,5 +20,6 @@ yarn.lock
 
 #sensitive infomation
 private.json
+
 
 

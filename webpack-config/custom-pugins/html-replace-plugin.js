@@ -18,7 +18,7 @@ class HtmlReplacePlugin{
                     const options = this.options;
 
                     for (let option_item in options){
-                        temp_file_content = Buffr.isBuffer(temp_file_content) ? temp_file_content.toString('utf8') : temp_file_content;
+                        temp_file_content = Buffer.isBuffer(temp_file_content) ? temp_file_content.toString('utf8') : temp_file_content;
                         compilation.assets[filename] = {
                             source: function() {
                                 return temp_file_content.replace(new RegExp(`LG_CONFIG_${option_item.toUpperCase()}`, 'g'), ['html'].includes(file_element) ? options[option_item] : `'${options[option_item]}'`)
