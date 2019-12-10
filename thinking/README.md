@@ -34,4 +34,11 @@
 ##### 	3）eslint是否提供更加精细的控制
 	src -> eslintA、 src/b -> eslintB、src/e/d -> eslintC
 
+## 4.备注
+1. dev阶段，mockjs更新时将该文件同步到dist内dist/**/mockjs，而不是修改html内mockjs的引入名
+2. 输出dist内vendorjs过大优化
+3. scss在使用vueloader提取commoncss时仍然保留在原文件内的问题
+4. engine.js需要hash值的线上缓存问题（在这里仍然不使用replace-html-plugin）
+5. 多级路由问题（最高支持3级，够用了）
+6. 未完待续...
 	
