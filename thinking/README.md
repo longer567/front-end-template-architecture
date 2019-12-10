@@ -40,5 +40,6 @@
 3. scss在使用vueloader提取commoncss时仍然保留在原文件内的问题
 4. engine.js需要hash值的线上缓存问题（在这里仍然不使用replace-html-plugin）
 5. 多级路由问题（最高支持3级，够用了）
-6. 未完待续...
+7. 添加对于react的支持(react_template, ts es?)
+8. 未完待续...
 	
