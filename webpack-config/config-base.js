@@ -20,6 +20,7 @@ const babelLoader = loaderPath('babel-loader')
 const cssLoader = loaderPath('css-loader')
 const sassLoader = loaderPath('sass-loader')
 const babelEnv = loaderPath('@babel/preset-env')
+const babelReact = loaderPath('@babel/preset-react')
 const urlLoader = loaderPath('url-loader')
 const fileLoader = loaderPath('file-loader')
 const eslintLoader = loaderPath('eslint-loader')
@@ -59,12 +60,14 @@ module.exports = (env_param) => {
             exclude: /node_modules/
         },
         {
-            test: /\.js$/,
+            test: /\.(js|jsx)$/,
             loader: babelLoader,
             query: {
                 presets: [
-                    babelEnv
-                ]
+                    babelEnv,
+                    babelReact
+                ],
+                exclude: /node_modules/
             }
         },
         {
@@ -99,7 +102,7 @@ module.exports = (env_param) => {
 
     lg_config_content.useEslint && rules.push({
         enforce: 'pre',
-        test: /\.(js|vue)$/,
+        test: /\.(js|jsx|vue)$/,
         loader: eslintLoader,
         include: [path.resolve(process.cwd(), 'src')],
         exclude: /node_modules/,
