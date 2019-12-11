@@ -7,7 +7,6 @@ module.exports = (program, args) => {
 
 async function devRun(args) {
   const fs = require('fs')
-  const url = require('url')
   const path = require('path')
   const cwdPath = (filepath) => path.resolve(process.cwd(), filepath)
   if (!lg.exist(cwdPath('./lg-config.js')))
@@ -19,6 +18,8 @@ async function devRun(args) {
   const { dev } = require(cwdPath('./lg-config.js'))
   const mockData = require(cwdPath('./mock.js'))
   const mockLg = require('../util/mock-config')
+
+  configBase.plugins.unshift(new webpack.HotModuleReplacementPlugin())
 
   const compiler = webpack({
     ...configBase

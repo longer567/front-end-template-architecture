@@ -9,6 +9,7 @@
 .code-workspace
 dist/
 build/
+.code-workspace
 
 # node.js
 #

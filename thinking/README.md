@@ -42,4 +42,6 @@
 5. 多级路由问题（最高支持3级，够用了）
 6. 添加react Vue的ts支持
 7. 开发一个emplate_vue_elegant（内含多种实用小功能）
+8. 修改流式下载
+9. mockjs目前只支持GET的请求
 	

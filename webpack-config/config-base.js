@@ -1,35 +1,31 @@
-const path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const InjectEngPlugin = require('./custom-pugins/inject-eng-plugin');
-const EslineRunningPlugin = require('./custom-pugins/eslint-runnint-plugin');
+const fs = require('fs') 
+const path = require('path') 
+const VueLoaderPlugin = require('vue-loader/lib/plugin') 
+const HtmlWebpackPlugin = require('html-webpack-plugin') 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin') 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') 
+const InjectEngPlugin = require('./custom-pugins/inject-eng-plugin') 
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin') 
 
 const template_file_path = process.cwd()
-const path_file_arr = fs.readdirSync(path.resolve(template_file_path, './src/pages'))
 const lg_config_content = require(path.resolve(template_file_path, 'lg-config.js'))
-
+const path_file_arr = fs.readdirSync(path.resolve(template_file_path, './src/pages'))
 const loaderPath = (LoaderName) => path.resolve(__dirname, `../node_modules/${LoaderName}`)
 
-const vueLoader = loaderPath('vue-loader')
-const babelLoader = loaderPath('babel-loader')
-const cssLoader = loaderPath('css-loader')
-const sassLoader = loaderPath('sass-loader')
-const babelEnv = loaderPath('@babel/preset-env')
-const babelReact = loaderPath('@babel/preset-react')
 const urlLoader = loaderPath('url-loader')
+const vueLoader = loaderPath('vue-loader')
+const cssLoader = loaderPath('css-loader')
 const fileLoader = loaderPath('file-loader')
+const sassLoader = loaderPath('sass-loader')
+const babelLoader = loaderPath('babel-loader')
+const babelEnv = loaderPath('@babel/preset-env')
 const eslintLoader = loaderPath('eslint-loader')
-const awesomeTypescriptLoader = loaderPath('awesome-typescript-loader')
+const babelReact = loaderPath('@babel/preset-react')
 const sourceMapLoader = loaderPath('source-map-loader')
+const awesomeTypescriptLoader = loaderPath('awesome-typescript-loader')
 
-const projectElement = lg_config_content.projectElement;
-const useTs = lg_config_content.useTypeScript;
-
+const useTs = lg_config_content.useTypeScript 
+const projectElement = lg_config_content.projectElement 
 projectElement === 'single' && path_file_arr.push('.')
 
 const entryMode = () => {
@@ -50,6 +46,7 @@ const entryMode = () => {
 module.exports = (env_param) => {
 
     const public_path = lg_config_content[env_param].publicPath
+    const hashChoice = env_param === 'prod' ? 'contenthash' : 'hash'
 
     const rules = [{
             test: /\.vue$/,
@@ -84,7 +81,7 @@ module.exports = (env_param) => {
                 loader: urlLoader,
                 options: {
                     limit: 8192,
-                    name: 'assets/images/[name]_[hash].[ext]'
+                    name: 'assets/images/[name]_[contenthash].[ext]'
                 }
             }]
         },
@@ -93,7 +90,7 @@ module.exports = (env_param) => {
             use: [{
                 loader: fileLoader,
                 options: {
-                    name: '[name]_[hash].[ext]',
+                    name: `[name]_[${hashChoice}].[ext]`,
                     outputPath: 'assets/fonts/'
                 }
             }]
@@ -131,7 +128,7 @@ module.exports = (env_param) => {
         devtool: "source-map",
         output: {
             path: path.resolve(template_file_path, `dist${public_path.substr(0, public_path.length - 1)}`),
-            filename: "js/[name].[hash].js",
+            filename: `js/[name].[${hashChoice}].js`,
             publicPath: public_path
         },
         module: {
@@ -153,7 +150,6 @@ module.exports = (env_param) => {
         },
         plugins: [
             new VueLoaderPlugin(),
-            // new EslineRunningPlugin(esLintPath.useEslint),
             ...path_file_arr.map(p => new HtmlWebpackPlugin({
                 chunks: ['module', 'common', projectElement === 'single' ? 'main' : p],
                 template: `src/${projectElement === 'single' ? '' : 'pages/' + p + '/'}index.html`,
@@ -161,12 +157,10 @@ module.exports = (env_param) => {
                 inject: 'body'
             })),
             new MiniCssExtractPlugin({
-                filename: 'style/[name].[contenthash].css',
+                filename: `style/[name].[${hashChoice}].css`,
                 // Dynamically output filename when css is built
-                // chunkFilename: "style/[name].[contenthash].css"
+                chunkFilename: `style/[name].[${hashChoice}].css`
             }),
-            new webpack.HotModuleReplacementPlugin(),
-            // new HtmlReplacePlugin(lg_config_content.replace_content[env_param]),
             new InjectEngPlugin(env_param || 'prod')
         ],
         optimization: {
@@ -180,7 +174,7 @@ module.exports = (env_param) => {
                     js: {
                         name: 'module',
                         test: /[\\/]node_modules[\\/]/,
-                        filename: 'js/module.[contenthash].js',
+                        filename: `js/module.[${hashChoice}].js`,
                         chunks: 'all',
                         priority: 10
                     },
