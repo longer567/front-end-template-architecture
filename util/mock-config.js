@@ -30,10 +30,11 @@ const hooksListener = (app, data) => {
     data.apiList.forEach(({
         url
     }) => {
+        const nowData = require(path.resolve(process.cwd(), 'mock.js')).apiList.find(i => i.url === url)
         if (!nowRoutePath.includes(data.prefix + url))
-            app.get(data.prefix + url, (req, res) => {
+            app[nowData.method.toLocaleLowerCase()](data.prefix + url, (req, res) => {
                 setTimeout(() => {
-                    res.json(Mock.mock(require(path.resolve(process.cwd(), 'mock.js')).apiList.find(i => i.url === url).handle))
+                    res.json(Mock.mock(nowData.handle))
                 }, require(path.resolve(process.cwd(), 'mock.js')).delay);
             })
     })
