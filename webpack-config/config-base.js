@@ -12,15 +12,18 @@ const lg_config_content = require(path.resolve(template_file_path, 'lg-config.js
 const path_file_arr = fs.readdirSync(path.resolve(template_file_path, './src/pages'))
 const loaderPath = (LoaderName) => path.resolve(__dirname, `../node_modules/${LoaderName}`)
 
+const rawLoader = loaderPath('raw-loader')
 const urlLoader = loaderPath('url-loader')
 const vueLoader = loaderPath('vue-loader')
 const cssLoader = loaderPath('css-loader')
 const fileLoader = loaderPath('file-loader')
 const sassLoader = loaderPath('sass-loader')
 const babelLoader = loaderPath('babel-loader')
+const stylusLoader = loaderPath('stylus-loader')
 const babelEnv = loaderPath('@babel/preset-env')
 const eslintLoader = loaderPath('eslint-loader')
 const babelReact = loaderPath('@babel/preset-react')
+const pugPlainLoader = loaderPath('pug-plain-loader')
 const sourceMapLoader = loaderPath('source-map-loader')
 const awesomeTypescriptLoader = loaderPath('awesome-typescript-loader')
 
@@ -72,7 +75,27 @@ module.exports = (env_param) => {
             use: [
                 MiniCssExtractPlugin.loader,
                 cssLoader,
-                sassLoader,
+                sassLoader
+            ]
+        },
+        {
+            test: /\.pug$/,
+            oneOf: [
+                    {
+                        resourceQuery: /^\?vue/,
+                        use: [pugPlainLoader]
+                    },
+                    {
+                        use: [rawLoader, pugPlainLoader]
+                    }
+                ]
+            },
+        {
+            test: /\.styl(us)?$/,
+            use: [
+                MiniCssExtractPlugin.loader,
+                cssLoader,
+                stylusLoader
             ]
         },
         {
