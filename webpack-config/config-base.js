@@ -19,6 +19,7 @@ const cssLoader = loaderPath('css-loader')
 const fileLoader = loaderPath('file-loader')
 const sassLoader = loaderPath('sass-loader')
 const babelLoader = loaderPath('babel-loader')
+const styleLoader = loaderPath('style-loader')
 const stylusLoader = loaderPath('stylus-loader')
 const babelEnv = loaderPath('@babel/preset-env')
 const eslintLoader = loaderPath('eslint-loader')
@@ -56,8 +57,7 @@ module.exports = (env_param) => {
             loader: vueLoader,
             options: {
                 extractCSS: true,
-            },
-            exclude: /node_modules/
+            }
         },
         {
             test: /\.(js|jsx)$/,
@@ -73,7 +73,7 @@ module.exports = (env_param) => {
         {
             test: /\.(sc|sa|c)ss$/,
             use: [
-                MiniCssExtractPlugin.loader,
+                env_param === 'prod' ? MiniCssExtractPlugin.loader : styleLoader,
                 cssLoader,
                 sassLoader
             ]
@@ -93,7 +93,7 @@ module.exports = (env_param) => {
         {
             test: /\.styl(us)?$/,
             use: [
-                MiniCssExtractPlugin.loader,
+                env_param === 'prod' ? MiniCssExtractPlugin.loader : styleLoader,
                 cssLoader,
                 stylusLoader
             ]
@@ -148,7 +148,7 @@ module.exports = (env_param) => {
     return {
         mode: 'production',
         entry: entryMode(),
-        devtool: "source-map",
+        devtool: 'eval',
         output: {
             path: path.resolve(template_file_path, `dist${public_path.substr(0, public_path.length - 1)}`),
             filename: `js/[name].[${hashChoice}].js`,
