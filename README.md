@@ -33,32 +33,32 @@
 
 ##### lg-config
 
-```json
+```js
 {
-    项目类型 single(单页面) multiple(多页面)
+    // 项目类型 single(单页面) multiple(多页面)
     "projectElement": "single",
-    是否启用es
+    // 是否启用es
     "useEslint": true,
-    是否启用ts
+    // 是否启用ts
     "useTypeScript": true,
-    dev阶段配置
+    // dev阶段配置
     "dev": {
-        参考 https://webpack.js.org/configuration/dev-server/#devserver
+        // 参考 https://webpack.js.org/configuration/dev-server/#devserver
         "devServer_config": {
             "contentBase": "./dist",
             "port": 9000,
             "compress": true,
         },
-        是否启用mock.js
+        // 是否启用mock.js
         "useMock": true,
-        静态资源加载
+        // 静态资源加载
         "path": "/a/b/",
-        项目打包路径
+        // 项目打包路径
         "publicPath": "/a/b/"
     },
-    生产配置
+    // 生产配置
     "prod": {
-        同"dev"的path、publicPath
+        // 同"dev"的path、publicPath
         "path": "/a/b/",
         "publicPath": "/a/b/"
     }
@@ -70,7 +70,7 @@
 > engine通过全局注入replace_content内的字段来控制静态变量的修改，来控制各种环境下的变量值
 
 * 示例
-    ```json
+    ```js
     {
         "replace_content": {
             "dev": {
@@ -106,18 +106,18 @@
 
 - 当前目录需要有mock文件
 
-```json
+```js
 {
-    请求路径公共字段
+    // 请求路径公共字段
     "prefix": "/a/b",
-    模拟延迟，默认0
+    // 模拟延迟，默认0
     "delay": 200,
-    需要mock的接口
+    // 需要mock的接口
     "apiList":[
         {
             "url": "/c/testUrl",
             "method": "GET",
-            接口对应mock数据，详见 https://github.com/nuysoft/Mock/wiki/Syntax-Specification
+            // 接口对应mock数据，详见 https://github.com/nuysoft/Mock/wiki/Syntax-Specification
             "handle": {}
         }
     ]
