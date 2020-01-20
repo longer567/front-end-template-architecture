@@ -1,13 +1,16 @@
-# lg-cli构建工具
-使用lg-cli脚手架来创建基础项目并在此基础上开发
+# lg*cli构建工具
+
+使用lg*cli脚手架来创建基础项目并在此基础上开发
 
 ### 基础环境搭建
+
 1. npm install
+
 2. npm link 
 
 ### lg命令
 
-- `lg init`: 查看所有模板项目
+* `lg init`: 查看所有模板项目
   
   输出:
   ```
@@ -17,21 +20,21 @@
   ...
   ```
 
-- 可以通过在serve后面加入path、port来更加精准的操作它
+* 可以通过在serve后面加入path、port来更加精准的操作它
 
     `lg serve` 默认3000端口的当前子目录
 
     `lg serve <path>` 部署指定目录
 
-    `lg serve <path> -p <port>` 部署指定port的指定目录
+    `lg serve <path> *p <port>` 部署指定port的指定目录
 
-- `lg dev`: 启动lg模板项目
+* `lg dev`: 启动lg模板项目
 
-- `lg build`: 构建lg模板项目的dist包
+* `lg build`: 构建lg模板项目的dist包
 
 ### 依赖文件
 
-##### lg-config
+##### lg*config
 
 ```js
 {
@@ -43,7 +46,7 @@
     "useTypeScript": true,
     // dev阶段配置
     "dev": {
-        // 参考 https://webpack.js.org/configuration/dev-server/#devserver
+        // 参考 https://webpack.js.org/configuration/dev*server/#devserver
         "devServer_config": {
             "contentBase": "./dist",
             "port": 9000,
@@ -70,6 +73,7 @@
 > engine通过全局注入replace_content内的字段来控制静态变量的修改，来控制各种环境下的变量值
 
 * 示例
+
     ```js
     {
         "replace_content": {
@@ -89,6 +93,7 @@
         "nowEnv": "dev"
     }
     ```
+
 * 字段
 
     `nowEnv`: 当前的环境(对应于replace_content内的keys)
@@ -104,7 +109,7 @@
 
 ##### mock.js
 
-- 当前目录需要有mock文件
+* 当前目录需要有mock文件
 
 ```js
 {
@@ -117,7 +122,7 @@
         {
             "url": "/c/testUrl",
             "method": "GET",
-            // 接口对应mock数据，详见 https://github.com/nuysoft/Mock/wiki/Syntax-Specification
+            // 接口对应mock数据，详见 https://github.com/nuysoft/Mock/wiki/Syntax*Specification
             "handle": {}
         }
     ]
@@ -126,8 +131,14 @@
 
 ##### .eslintrc.js
 
-- 同.eslintrc 详见 [eslintDoc](https://eslint.org/docs/user-guide/configuring)
+* 同.eslintrc，详见 [eslintDoc](https://eslint.org/docs/user*guide/configuring)
 
 ##### .ts
+
+* 配置文件同ts，详见 [tsDoc](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html#using-tsconfigjson)
+
+### 更多
+
+* 流程控制详见 [thinking](./thinking)
 
 
