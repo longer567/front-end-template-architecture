@@ -23,7 +23,7 @@ lg.get = (url, data = '') => {
 	return new Promise((resolve, reject) => {
 		protocolrequire.get(url, {
 			headers: {
-				'User-Agent': 'fendoudexiaolong'
+				'User-Agent': 'longer567'
 			}
 		}, res => {
 			let chunks = ''

@@ -11,7 +11,7 @@ function lgInit(args) {
     const inquirer = require('inquirer');
     const ora = require('ora');
     const spinner = ora('Loading unicorns');
-    var AdmZip = require('adm-zip');
+    const AdmZip = require('adm-zip');
 
     const gitapi = require('../util/git-api');
 

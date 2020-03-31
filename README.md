@@ -16,7 +16,7 @@
 
 * `lg init`: 查看所有模板项目
   
-  输出:
+* 输出:
   ```
   template_vue
   template_zepto
