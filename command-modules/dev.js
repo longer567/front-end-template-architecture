@@ -27,16 +27,7 @@ async function devRun(args) {
   
   const devServer = new WebpackDevServer(compiler, {
     ...dev.devServer_config,
-    before: mockLg(mockData, dev),
-    after(app, server, compiler) {
-      app.get('*.*', (req, res) => {
-        fs.readFile(path.resolve(process.cwd(), './engine.js'), (err, data) => {
-          if (err)
-            lg.logs(err)
-          res.end(data)
-        })
-      })
-    }
+    before: mockLg(mockData, dev)
   })
 
   devServer.listen(dev.devServer_config.port || 3001)

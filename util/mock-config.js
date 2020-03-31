@@ -57,7 +57,6 @@ module.exports = (mockData, devBase) => (app, server, compiler) => {
         devBase.useMock && hooksListener(app, mockData)
     }).on('change', async p => {
         devBase.useMock && lg.debounce(changeFile, saveDelay)(app, devBase, p)
-        whatFileControll(p, 'engine.js', devBase)
         console.log('file changed effectivation')
     })
 }
