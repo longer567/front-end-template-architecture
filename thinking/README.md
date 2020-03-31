@@ -68,11 +68,11 @@
 
 2. 多级路由问题
 
-3. ～～添加react Vue的ts支持
+3. ~~添加react Vue的ts支持
 
-4. ～～开发一个emplate_vue_elegant（内含多种实用小功能）
+4. ~~开发一个emplate_vue_elegant（内含多种实用小功能）
 
 5. 修改流式下载（避免因异常问题导致下载的临时文件被保留）
 
-6. ～～mockjs目前只支持GET的请求
+6. ~~mockjs目前只支持GET的请求
 	

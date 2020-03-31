@@ -1,6 +1,6 @@
 # lg-cli构建工具
 
-使用lg-cli脚手架来创建基础项目并在此基础上开发
+使用lg-cli脚手架来创建基础项目并在此基础上开发（模板项目库：organizations/elegantTemplage）
 
 ### 基础环境搭建
 
