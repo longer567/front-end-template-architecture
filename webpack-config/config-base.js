@@ -4,7 +4,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin') 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin') 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin') 
-const InjectEngPlugin = require('./custom-pugins/inject-eng-plugin') 
+const HtmlReplacePlugin = require('./custom-pugins/html-replace-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin') 
 
 const template_file_path = process.cwd()
@@ -184,7 +184,7 @@ module.exports = (env_param) => {
                 // Dynamically output filename when css is built
                 chunkFilename: `style/[name].[${hashChoice}].css`
             }),
-            new InjectEngPlugin(env_param || 'prod')
+            new HtmlReplacePlugin(lg_config_content[env_param].env)
         ],
         optimization: {
             // env must be production

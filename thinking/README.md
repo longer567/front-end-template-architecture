@@ -64,7 +64,8 @@
 
 ## 5.备注
 
-1. engine.js需要hash值的线上缓存问题
+1. ~~engine.js需要hash值的线上缓存问题~~
+* 舍弃 engine.js：外部注入文件无法记录hash导致文件修改对比、线上缓存问题，使用html-replace-plugin替换
 
 2. 多级路由问题
 
