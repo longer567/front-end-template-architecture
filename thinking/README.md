@@ -64,21 +64,15 @@
 
 ## 5.备注
 
-1. dev阶段，engine.js更新时将该文件同步到dist内dist/**/engine.js，而不是修改html内engine.js的引入名
+1. engine.js需要hash值的线上缓存问题
 
-2. 输出dist内vendorjs过大优化
+2. 多级路由问题
 
-3. scss在使用vueloader提取commoncss时仍然保留在原文件内的问题
+3. ～～添加react Vue的ts支持
 
-4. engine.js需要hash值的线上缓存问题
+4. ～～开发一个emplate_vue_elegant（内含多种实用小功能）
 
-5. 多级路由问题
+5. 修改流式下载（避免因异常问题导致下载的临时文件被保留）
 
-6. 添加react Vue的ts支持
-
-7. 开发一个emplate_vue_elegant（内含多种实用小功能）
-
-8. 修改流式下载
-
-9. mockjs目前只支持GET的请求
+6. ～～mockjs目前只支持GET的请求
 	
