@@ -1,11 +1,11 @@
-const fs = require('fs') 
-const path = require('path') 
-const VueLoaderPlugin = require('vue-loader/lib/plugin') 
-const HtmlWebpackPlugin = require('html-webpack-plugin') 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin') 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin') 
+const fs = require('fs')
+const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlReplacePlugin = require('./custom-pugins/html-replace-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin') 
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const template_file_path = process.cwd()
 const lg_config_content = require(path.resolve(template_file_path, 'lg-config.js'))
@@ -27,8 +27,8 @@ const pugPlainLoader = loaderPath('pug-plain-loader')
 const sourceMapLoader = loaderPath('source-map-loader')
 const awesomeTypescriptLoader = loaderPath('awesome-typescript-loader')
 
-const useTs = lg_config_content.useTypeScript 
-const projectElement = lg_config_content.projectElement 
+const useTs = lg_config_content.useTypeScript
+const projectElement = lg_config_content.projectElement
 projectElement === 'single' && path_file_arr.push('.')
 
 const entryMode = () => {
@@ -50,7 +50,7 @@ module.exports = (env_param) => {
 
     const public_path = lg_config_content[env_param].publicPath
     const hashChoice = env_param === 'dev' ? 'hash' : 'contenthash';
-    
+
     const rules = [{
             test: /\.vue$/,
             loader: vueLoader,
@@ -79,16 +79,15 @@ module.exports = (env_param) => {
         },
         {
             test: /\.pug$/,
-            oneOf: [
-                    {
-                        resourceQuery: /^\?vue/,
-                        use: [pugPlainLoader]
-                    },
-                    {
-                        use: [rawLoader, pugPlainLoader]
-                    }
-                ]
-            },
+            oneOf: [{
+                    resourceQuery: /^\?vue/,
+                    use: [pugPlainLoader]
+                },
+                {
+                    use: [rawLoader, pugPlainLoader]
+                }
+            ]
+        },
         {
             test: /\.styl(us)?$/,
             use: [
@@ -106,6 +105,14 @@ module.exports = (env_param) => {
                     name: 'assets/images/[name]_[contenthash].[ext]'
                 }
             }]
+        },
+        {
+            test: /\.ts(x?)$/,
+            loader: awesomeTypescriptLoader
+        }, {
+            enforce: "pre",
+            test: /\.js$/,
+            loader: sourceMapLoader
         },
         {
             test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -129,21 +136,6 @@ module.exports = (env_param) => {
             formatter: require('eslint-friendly-formatter')
         }
     })
-
-    const tsRuleConfig = [{
-            test: /\.tsx?$/,
-            loader: awesomeTypescriptLoader
-        },
-        {
-            enforce: "pre",
-            test: /\.js$/,
-            loader: sourceMapLoader
-        }
-
-    ]
-
-    useTs && rules.push(...tsRuleConfig)
-
     return {
         mode: 'production',
         entry: entryMode(),
