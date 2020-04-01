@@ -19,7 +19,6 @@ const cssLoader = loaderPath('css-loader')
 const fileLoader = loaderPath('file-loader')
 const sassLoader = loaderPath('sass-loader')
 const babelLoader = loaderPath('babel-loader')
-const styleLoader = loaderPath('style-loader')
 const stylusLoader = loaderPath('stylus-loader')
 const babelEnv = loaderPath('@babel/preset-env')
 const eslintLoader = loaderPath('eslint-loader')
@@ -50,8 +49,8 @@ const entryMode = () => {
 module.exports = (env_param) => {
 
     const public_path = lg_config_content[env_param].publicPath
-    const hashChoice = env_param === 'prod' ? 'contenthash' : 'hash'
-
+    const hashChoice = env_param === 'dev' ? 'hash' : 'contenthash';
+    
     const rules = [{
             test: /\.vue$/,
             loader: vueLoader,
@@ -73,7 +72,7 @@ module.exports = (env_param) => {
         {
             test: /\.(sc|sa|c)ss$/,
             use: [
-                env_param === 'prod' ? MiniCssExtractPlugin.loader : styleLoader,
+                MiniCssExtractPlugin.loader,
                 cssLoader,
                 sassLoader
             ]
@@ -93,7 +92,7 @@ module.exports = (env_param) => {
         {
             test: /\.styl(us)?$/,
             use: [
-                env_param === 'prod' ? MiniCssExtractPlugin.loader : styleLoader,
+                MiniCssExtractPlugin.loader,
                 cssLoader,
                 stylusLoader
             ]
