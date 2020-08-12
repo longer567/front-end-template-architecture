@@ -6,6 +6,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlReplacePlugin = require('./custom-pugins/html-replace-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CompressImageLgPlugin = require('./custom-pugins/compress-image-lg-plugin')
 
 const template_file_path = process.cwd()
 const lg_config_content = require(path.resolve(template_file_path, 'lg-config.js'))
@@ -99,7 +100,7 @@ module.exports = (env_param) => {
         {
             test: /\.(jpg|png|gif|bmp|jpeg)$/,
             use: [{
-                loader: urlLoader,
+                loader: fileLoader,
                 options: {
                     limit: 8192,
                     name: 'assets/images/[name]_[contenthash].[ext]'
@@ -114,16 +115,16 @@ module.exports = (env_param) => {
             test: /\.js$/,
             loader: sourceMapLoader
         },
-        {
-            test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-            use: [{
-                loader: fileLoader,
-                options: {
-                    name: `[name]_[${hashChoice}].[ext]`,
-                    outputPath: 'assets/fonts/'
-                }
-            }]
-        }
+        // {
+        //     test: /\.(woff(2)?|ttf|eot|svg|jpg)$/,
+        //     use: [{
+        //         loader: fileLoader,
+        //         options: {
+        //             name: `[name]_[${hashChoice}].[ext]`,
+        //             outputPath: 'assets/'
+        //         }
+        //     }]
+        // }
     ]
 
     lg_config_content.useEslint && rules.push({
@@ -175,7 +176,8 @@ module.exports = (env_param) => {
                 // Dynamically output filename when css is built
                 chunkFilename: `style/[name].[${hashChoice}].css`
             }),
-            new HtmlReplacePlugin(lg_config_content[env_param].env)
+            new HtmlReplacePlugin(lg_config_content[env_param].env),
+            new CompressImageLgPlugin()
         ],
         optimization: {
             // env must be production
